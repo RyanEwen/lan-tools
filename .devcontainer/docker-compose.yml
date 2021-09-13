@@ -19,6 +19,7 @@ services:
     build: ./
     volumes:
       - ..:/usr/src/app:cached
+      - ~/.ssh:/home/node/.ssh
     environment:
       NODE_ENV: development
       # BASEURL: 'test'
