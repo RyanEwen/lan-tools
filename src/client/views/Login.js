@@ -1,6 +1,5 @@
 import Button from '@material-ui/core/Button'
 import Container from '@material-ui/core/Container'
-import Divider from '@material-ui/core/Divider'
 import Grid from '@material-ui/core/Grid'
 import Link from '@material-ui/core/Link'
 import { makeStyles } from '@material-ui/core/styles'
@@ -10,7 +9,6 @@ import React, { useContext, useState } from 'react'
 import { Link as RouterLink, useHistory } from "react-router-dom"
 import Utilities from '../classes/Utilities'
 import Heading from '../components/Heading'
-import PasswordField from '../components/PasswordField'
 import { AppContext } from '../context/AppContextProvider'
 
 const useStyles = makeStyles((theme) => ({
@@ -27,8 +25,7 @@ const useStyles = makeStyles((theme) => ({
 }))
 
 export default function Login(props) {
-    const { paths, features, showMessage, showError, socket } = useContext(AppContext)
-    const history = useHistory()
+    const { paths, showMessage, showError, socket } = useContext(AppContext)
     const [waiting, setWaiting] = useState(false)
     const classes = useStyles()
 

@@ -2,13 +2,13 @@ import Button from '@material-ui/core/Button'
 import green from '@material-ui/core/colors/green'
 import Container from '@material-ui/core/Container'
 import Grid from '@material-ui/core/Grid'
-import Link from '@material-ui/core/Link'
 import { makeStyles } from '@material-ui/core/styles'
 import TextField from '@material-ui/core/TextField'
 import PersonIcon from '@material-ui/icons/Person'
 import React, { useContext, useState } from 'react'
-import { Link as RouterLink } from "react-router-dom"
 import Utilities from '../classes/Utilities'
+
+import Chips from '../components/Chips'
 import Heading from '../components/Heading'
 import { AppContext } from '../context/AppContextProvider'
 
@@ -26,9 +26,32 @@ const useStyles = makeStyles((theme) => ({
 }))
 
 export default function Account(props) {
-    const { paths, user, showMessage, showError, socket } = useContext(AppContext)
+    const { user, showMessage, showError, socket } = useContext(AppContext)
     const [waiting, setWaiting] = useState(false)
+    const [nicknames, setNicknames] = useState(user.nicknames)
     const classes = useStyles()
+
+    const handleNicknameAdd = async (value) => {
+        try {
+            let nickname = value.trim()
+
+            if (!nickname) {
+                throw new Error('Empty nicknames are not allowed')
+            }
+
+            if (nicknames.includes(nickname)) {
+                throw new Error('Nickname is already in list')
+            }
+
+            setNicknames([...nicknames, nickname])
+        } catch (err) {
+            showError(err)
+        }
+    }
+
+    const handleNicknameRemove = async (value) => {
+        setNicknames(nicknames.filter(nickname => nickname != value))
+    }
 
     async function handleSubmit(event) {
         event.preventDefault()
@@ -40,7 +63,7 @@ export default function Account(props) {
 
             const response = await socket.send('account', {
                 name: values.name,
-                nicknames: values.nicknames,
+                nicknames,
             })
 
             showMessage(response, { variant: 'success' })
@@ -59,6 +82,20 @@ export default function Account(props) {
             </Heading>
             <form className={classes.form} onSubmit={handleSubmit}>
                 <Grid container spacing={2}>
+                    <Grid item xs={12}>
+                        <TextField
+                            id="email"
+                            name="email"
+                            defaultValue={user.email}
+                            label="Email Address"
+                            variant="outlined"
+                            type="email"
+                            autoComplete="email"
+                            required
+                            fullWidth
+                            disabled={true}
+                        />
+                    </Grid>
                     <Grid item xs={12} sm={6}>
                         <TextField
                             id="name"
@@ -72,31 +109,14 @@ export default function Account(props) {
                             disabled={waiting}
                         />
                     </Grid>
-                    <Grid item xs={12} sm={6}>
-                        <TextField
-                            id="nicknames"
-                            name="nicknames"
-                            defaultValue={user.nicknames}
-                            label="Nicknames"
-                            variant="outlined"
-                            autoComplete="nickname"
-                            required
-                            fullWidth
+                    <Grid item xs={12} >
+                        <Chips
+                            label="Add Nickname"
+                            helperText="Type a nickname then press Enter to add it"
+                            chips={nicknames}
                             disabled={waiting}
-                        />
-                    </Grid>
-                    <Grid item xs={12}>
-                        <TextField
-                            id="email"
-                            name="email"
-                            defaultValue={user.email}
-                            label="Email Address"
-                            variant="outlined"
-                            type="email"
-                            autoComplete="email"
-                            required
-                            fullWidth
-                            disabled={true}
+                            onChipAdd={handleNicknameAdd}
+                            onChipRemove={handleNicknameRemove}
                         />
                     </Grid>
                 </Grid>

@@ -1,19 +1,19 @@
 import Button from '@material-ui/core/Button'
 import Container from '@material-ui/core/Container'
-import FormControlLabel from '@material-ui/core/FormControlLabel'
 import Grid from '@material-ui/core/Grid'
 import Link from '@material-ui/core/Link'
-import Radio from '@material-ui/core/Radio'
-import RadioGroup from '@material-ui/core/RadioGroup'
 import { makeStyles } from '@material-ui/core/styles'
 import TextField from '@material-ui/core/TextField'
 import Typography from '@material-ui/core/Typography'
 import PersonIcon from '@material-ui/icons/Person'
 import React, { useContext, useState } from 'react'
 import { Link as RouterLink } from "react-router-dom"
+
 import Utilities from '../classes/Utilities'
+
 import Heading from '../components/Heading'
-import PasswordField from '../components/PasswordField'
+import Chips from '../components/Chips'
+
 import { AppContext } from '../context/AppContextProvider'
 
 const useStyles = makeStyles((theme) => ({
@@ -27,12 +27,35 @@ const useStyles = makeStyles((theme) => ({
 }))
 
 export default function Register(props) {
-    const { paths, features, showMessage, showError, socket } = useContext(AppContext)
+    const { paths, showMessage, showError, socket } = useContext(AppContext)
     const [waiting, setWaiting] = useState(false)
     const [complete, setComplete] = useState(false)
+    const [nicknames, setNicknames] = useState([])
     const classes = useStyles()
 
-    async function handleSubmit(event) {
+    const handleNicknameAdd = async (value) => {
+        try {
+            let nickname = value.trim()
+
+            if (!nickname) {
+                throw new Error('Empty nicknames are not allowed')
+            }
+
+            if (nicknames.includes(nickname)) {
+                throw new Error('Nickname is already in list')
+            }
+
+            setNicknames([ ...nicknames, nickname ])
+        } catch (err) {
+            showError(err)
+        }
+    }
+
+    const handleNicknameRemove = async (value) => {
+        setNicknames(nicknames.filter(nickname => nickname != value))
+    }
+
+    const handleSubmit = async (event) => {
         event.preventDefault()
 
         setWaiting(true)
@@ -42,9 +65,9 @@ export default function Register(props) {
 
             const response = await socket.send('register', {
                 step: 'register',
-                name: values.name,
-                nicknames: values.nicknames,
                 email: values.email,
+                name: values.name,
+                nicknames,
             })
 
             showMessage(response, { variant: 'success' })
@@ -66,6 +89,19 @@ export default function Register(props) {
                     <Grid container spacing={2}>
                         <Grid item xs={12}>
                             <TextField
+                                id="email"
+                                name="email"
+                                label="Email Address"
+                                variant="outlined"
+                                type="email"
+                                autoComplete="email"
+                                required
+                                fullWidth
+                                disabled={waiting}
+                            />
+                        </Grid>
+                        <Grid item xs={12}>
+                            <TextField
                                 id="name"
                                 name="name"
                                 label="Name"
@@ -77,28 +113,13 @@ export default function Register(props) {
                             />
                         </Grid>
                         <Grid item xs={12} >
-                            <TextField
-                                id="nicknames"
-                                name="nicknames"
-                                label="Nicknames"
-                                variant="outlined"
-                                autoComplete="nickname"
-                                required
-                                fullWidth
+                            <Chips
+                                label="Add Nickname"
+                                helperText="Type a nickname then press Enter to add it"
+                                chips={nicknames}
                                 disabled={waiting}
-                            />
-                        </Grid>
-                        <Grid item xs={12}>
-                            <TextField
-                                id="email"
-                                name="email"
-                                label="Email Address"
-                                variant="outlined"
-                                type="email"
-                                autoComplete="email"
-                                required
-                                fullWidth
-                                disabled={waiting}
+                                onChipAdd={handleNicknameAdd}
+                                onChipRemove={handleNicknameRemove}
                             />
                         </Grid>
                     </Grid>
