@@ -14,6 +14,10 @@ export default async function (socket, session, message = {}) {
 
         const user = await User.findByPk(socket.userId)
 
+        await user.update({
+            ipAddress: socket.request.connection.remoteAddress,
+        })
+
         return { user }
     } else {
         return { user: null }

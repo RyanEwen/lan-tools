@@ -24,6 +24,10 @@ export default async function (socket, session, message) {
         throw new Error('User not found')
     }
 
+    await user.update({
+        ipAddress: socket.request.connection.remoteAddress,
+    })
+
     // update session
 
     session.userId = user.id
