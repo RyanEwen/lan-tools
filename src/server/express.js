@@ -7,16 +7,19 @@ export default function () {
 
     app.use(sessionHandler)
 
+    app.set('trust proxy', true)
+
     // search for actual files before serving app in their place
     app.use(express.static(path.join(__dirname, '..', 'client')))
     app.use(express.static(path.join(__dirname, '..', '..', 'static')))
 
     // catch-all
     app.get('*', (req, res) => {
+        console.log('ip', req.ip)
         res.sendFile(path.join(__dirname, '..', 'client', 'index.html'))
     })
 
-    const server = app.listen(process.env.PORT || 80)
+    const server = app.listen(process.env.PORT || 3000, process.env.INTERFACE || '0.0.0.0')
 
     return server
 }
