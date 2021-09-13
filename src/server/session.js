@@ -13,8 +13,8 @@ const sessionStore = new (SequelizeStore(session.Store))({
 export default session({
     cookie: {
         maxAge: 31 * (24 * 60 * 60 * 1000),
-        secure: process.env.NODE_ENV === 'production' ? true : 'auto',
-        sameSite: process.env.NODE_ENV === 'production' ? 'none' : false,
+        secure: 'auto',
+        sameSite: false,
     },
     name: 'lan-tools-session',
     saveUninitialized: true,
