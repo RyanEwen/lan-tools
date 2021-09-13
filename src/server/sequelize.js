@@ -37,7 +37,7 @@ export default function () {
             host: mysqlInfo.host,
             dialect: 'mysql',
             dialectModule: mysql2,
-            logging: process.env.NODE_ENV == 'production' ? false : console.debug, // TODO log somewhere
+            logging: false, // TODO log somewhere
         }
     )
 
