@@ -4,7 +4,7 @@ import Sequelize from 'sequelize'
 var sequelize
 
 const mysqlInfo = {
-    host: process.env.DBHOST || 'db',
+    host: process.env.DBHOST || 'localhost',
     port: process.env.DBPORT || 3306,
     user: process.env.DBUSER || 'root',
     pass: process.env.DBPASS || 'example',
