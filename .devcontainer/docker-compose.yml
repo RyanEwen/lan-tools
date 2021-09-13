@@ -5,7 +5,6 @@ services:
     image: mariadb
     environment:
       MYSQL_ROOT_PASSWORD: example
-    # network_mode: host
     restart: unless-stopped
 
   adminer:
@@ -14,7 +13,6 @@ services:
       - db
     ports:
       - 8080:8080
-    # network_mode: host
     restart: unless-stopped
 
   app:
@@ -30,6 +28,5 @@ services:
       - db
     ports:
       - "3000:3000"
-    # network_mode: host
     command: sleep infinity
     restart: unless-stopped
