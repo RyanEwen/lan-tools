@@ -1,0 +1,10 @@
+{
+    "files.exclude": {
+        "node_modules": true,
+        "dist": true
+    },
+    "files.insertFinalNewline": true,
+    "files.trimFinalNewlines": true,
+    "editor.formatOnPaste": true,
+    "eslint.lintTask.enable": true,
+}

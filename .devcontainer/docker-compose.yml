@@ -1,0 +1,30 @@
+version: '3'
+
+services:
+  db:
+    image: mariadb
+    environment:
+      MYSQL_ROOT_PASSWORD: example
+    restart: unless-stopped
+
+  adminer:
+    image: adminer
+    depends_on:
+      - db
+    ports:
+      - 8080:8080
+    restart: unless-stopped
+
+  app:
+    build: ./
+    volumes:
+      - ..:/usr/src/app:cached
+    environment:
+      NODE_ENV: development
+      # BASEURL: 'test'
+    depends_on:
+      - db
+    ports:
+      - "3000:80"
+    command: sleep infinity
+    restart: unless-stopped

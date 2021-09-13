@@ -1,0 +1,11 @@
+<base href="/">
+
+<link rel="icon" type="image/png" href="favicon.png" sizes="32x32">
+<link rel="manifest" id="pwa-manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="icon-192x192.png">
+
+<script>
+    if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.register('pwa-serviceworker.js', { scope: '/' })
+    }
+</script>
