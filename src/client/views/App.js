@@ -26,6 +26,7 @@ import { withAppContext } from '../context/AppContextProvider'
 import NotFound from './404'
 import Account from './Account'
 import Login from './Login'
+import Guests from './Guests'
 import Register from './Register'
 import Welcome from './Welcome'
 
@@ -126,6 +127,7 @@ class App extends React.Component {
                     <SwipeableDrawer open={drawerOpen} onClose={this.closeDrawer} onOpen={this.openDrawer}>
                         <List className={classes.drawerList} component="nav">
                             <NavListItem onClick={this.closeDrawer} to={paths.root} primary="Home" exact />
+                            <NavListItem onClick={this.closeDrawer} to={paths.guests} primary="Guests" />
                         </List>
                     </SwipeableDrawer>
                 }
@@ -182,6 +184,11 @@ class App extends React.Component {
 
                             <PrivateRoute path={paths.root} exact>
                                 <Welcome />
+                            </PrivateRoute>
+
+                            <PrivateRoute path={paths.guests}>
+                                <Guests />
+                            </PrivateRoute>
 
                             <PrivateRoute path={paths.account}>
                                 <Account />

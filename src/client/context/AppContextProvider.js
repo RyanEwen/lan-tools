@@ -26,6 +26,7 @@ class AppContextProvider extends React.Component {
             register: `${url}/register`,
             login: `${url}/login`,
             account: `${url}/account`,
+            guests: `${url}/guests`,
         }
     }
 
