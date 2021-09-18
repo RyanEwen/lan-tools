@@ -31,8 +31,8 @@ class Guests extends React.Component {
         const { guests } = serverState
         const url = match.path
         const filterPattern = new RegExp("(?=.*?\\b" + filterTerm.split(" ").join(")(?=.*?\\b") + ").*", "i")
-        const filteredGuests = guests.filter((guest) => {
-            return !filterTerm.length ? true : guest.name.match(filterPattern)
+        const filteredGuests = !filterTerm.length ? guests : guests.filter(guest => {
+            return guest.name.match(filterPattern)
         })
 
         return (
