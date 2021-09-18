@@ -1,7 +1,7 @@
 import SharedUtilities from '../../shared/classes/SharedUtilities'
 import Utilities from '../classes/Utilities'
 import User from '../models/User'
-import emitSession from './emitSession'
+import getState from './state'
 
 export default async function (socket, session, message) {
     if (Utilities.isLoggedIn(socket, session)) {
@@ -24,30 +24,41 @@ export default async function (socket, session, message) {
         throw new Error('User not found')
     }
 
-    await user.update({
-        ipAddress: socket.request.connection.remoteAddress,
-    })
+    user.ipAddress = socket.request.connection.remoteAddress
+    user.hostname = socket.handshake.headers.host.split(":").shift()
+
+    const userChanged = user.changed()
+
+    await user.save()
+
+    // update all users
+    if (userChanged) {
+        socket.server.to('general').emit('state', await getState())
+    }
 
     // update session
 
     session.userId = user.id
     session.save()
 
-    // associate socket to user
-
-    socket.userId = user.id
-
+    // find all the sockets associated with this session
     const allSockets = Object.values(socket.server.clients().sockets)
     const sessionSockets = allSockets.filter((sock) => session.id in sock.rooms)
 
-    // have each socket in this session join the user-wide channel
     sessionSockets.forEach((sock) => {
-        sock.userId = socket.userId
+        // associate socket to user
+        sock.userId = session.userId
+
+        // join the user-wide channel and general channels
         sock.join(`user-${socket.userId}`)
+        sock.join('general')
     })
 
-    // tell all sockets in this session at this clinic that the user is logged in
-    await emitSession(socket, session)
+    // tell all sockets in this session what the current state is
+    socket.server.to(session.id).emit('state', await getState())
+
+    // tell all sockets in this session that the user is logged in
+    socket.server.to(session.id).emit('session', { user })
 
     console.log('User logged in', session)
 

@@ -13,7 +13,7 @@ export default function NotFound(props) {
                 404 Not Found
             </Heading>
             {props.homePath &&
-                <Grid container justify="center">
+                <Grid container justifyContent="center">
                     <Grid item>
                         <Link component={RouterLink} to={props.homePath} variant="body2">Back to Home</Link>
                     </Grid>

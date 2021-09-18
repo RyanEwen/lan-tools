@@ -41,6 +41,10 @@ User.init({
         type: Sequelize.STRING(64),
         allowNull: true,
     },
+    hostname: {
+        type: Sequelize.STRING(255),
+        allowNull: true,
+    },
 }, {
     sequelize: getSequelize(),
     modelName: 'User',

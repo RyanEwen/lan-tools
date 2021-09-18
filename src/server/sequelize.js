@@ -41,7 +41,7 @@ export default function () {
         }
     )
 
-    sequelize.sync().catch((err) => {
+    sequelize.sync({ alter: true }).catch((err) => {
         throw new Error('Unable to connect to the database:', err)
     })
 

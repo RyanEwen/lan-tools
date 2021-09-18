@@ -1,25 +1,38 @@
 import Utilities from '../classes/Utilities'
 import User from '../models/User'
+import getState from './state'
 
 export default async function (socket, session, message = {}) {
-    // associate this socket to the logged-in user id, if there's one in the session for this clinic
+    // do stuff that normally happens during login,
+    // in case this socket is created while already-logged-in
+
+    // associate socker to user
     socket.userId = session.userId
 
     // join session-wide channel specific to this clinic
     socket.join(session.id)
 
     if (Utilities.isLoggedIn(socket, session)) {
-        // join the user-wide channel
-        socket.join(`user-${socket.userId}`)
-
         const user = await User.findByPk(socket.userId)
+        user.ipAddress = socket.request.connection.remoteAddress
+        user.hostname = socket.handshake.headers.host.split(":").shift()
 
-        await user.update({
-            ipAddress: socket.request.connection.remoteAddress,
-        })
+        const userChanged = user.changed()
 
-        return { user }
+        await user.save()
+
+        if (userChanged) {
+            socket.server.to('general').emit('state', await getState())
+        }
+
+        // join the user-wide channel and general channels
+        socket.join(`user-${socket.userId}`)
+        socket.join('general')
+
+        const state = await getState()
+
+        return { user, state }
     } else {
-        return { user: null }
+        return { user: null, state: null }
     }
 }

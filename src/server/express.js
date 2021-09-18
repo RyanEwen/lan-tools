@@ -15,7 +15,6 @@ export default function () {
 
     // catch-all
     app.get('*', (req, res) => {
-        console.log('ip', req.ip)
         res.sendFile(path.join(__dirname, '..', 'client', 'index.html'))
     })
 

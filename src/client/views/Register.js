@@ -133,7 +133,7 @@ export default function Register(props) {
                     >
                         Register
                     </Button>
-                    <Grid container justify="flex-end">
+                    <Grid container justifyContent="flex-end">
                         <Grid item>
                             <Link component={RouterLink} to={paths.login} variant="body2">Already have an account?</Link>
                         </Grid>
@@ -148,7 +148,7 @@ export default function Register(props) {
                         </Typography>
                     </Grid>
                     <p></p>
-                    <Grid container justify="flex-end">
+                    <Grid container justifyContent="flex-end">
                         <Grid item>
                             <Link component={RouterLink} to={paths.login} ariant="body2">Back to Login</Link>
                         </Grid>

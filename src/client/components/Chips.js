@@ -22,7 +22,6 @@ const useStyles = makeStyles((theme) => ({
 
 const actionKeys = [
     'Enter',
-    'Tab',
 ]
 
 export default function Chips(props) {

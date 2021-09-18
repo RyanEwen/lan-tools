@@ -81,7 +81,7 @@ export default function Login(props) {
                     Login
                 </Button>
             </form>
-            <Grid container justify="flex-end">
+            <Grid container justifyContent="flex-end">
                 <Grid item>
                     <Link component={RouterLink} to={paths.register} variant="body2">Need an account?</Link>
                 </Grid>

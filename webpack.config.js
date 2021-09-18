@@ -53,7 +53,7 @@ const clientConfig = {
     },
     devtool: false,
     plugins: [
-        new CleanWebpackPlugin(),
+        new CleanWebpackPlugin({ cleanStaleWebpackAssets: false }),
         new webpack.EnvironmentPlugin(['BASEURL']),
         new webpack.SourceMapDevToolPlugin({
             filename: '[name].bundle.js.map',

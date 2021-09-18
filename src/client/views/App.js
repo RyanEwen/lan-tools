@@ -183,7 +183,8 @@ class App extends React.Component {
                             {/* Private views */}
 
                             <PrivateRoute path={paths.root} exact>
-                                <Welcome />
+                                <Guests />
+                                {/* <Welcome /> */}
                             </PrivateRoute>
 
                             <PrivateRoute path={paths.guests}>

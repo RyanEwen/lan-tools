@@ -3,7 +3,6 @@ import { withSnackbar } from 'notistack'
 import React from "react"
 import { withRouter } from "react-router-dom"
 import getSocketio from '../socketio'
-import { ThemeProvider } from '@material-ui/core/styles'
 
 export const AppContext = React.createContext()
 
@@ -14,6 +13,7 @@ class AppContextProvider extends React.Component {
         connected: false,
         initialized: false,
         user: null,
+        serverState: null,
     }
 
     constructor(props) {
@@ -34,23 +34,24 @@ class AppContextProvider extends React.Component {
         this.unbindConnect = socket.on('connect', this.handleConnect)
         this.unbindDisconnect = socket.on('disconnect', this.handleDisconnect)
         this.unbindSession = socket.on('session', this.handleSessionUpdate)
-        this.unbindCartUpdate = socket.on('cartUpdate', this.handleCartUpdate)
+        this.unbindServerState = socket.on('state', this.handleServerStateUpdate)
     }
 
     componentWillUnmount = () => {
         this.unbindConnect()
         this.unbindSession()
-        this.unbindDisconnect()
+        this.unbindServerState()
     }
 
     initialFetch = async () => {
         try {
-            const { user } = await socket.send('init')
+            const { user, state } = await socket.send('init')
 
             await this.setState({
                 connected: true,
                 initialized: true,
                 user,
+                serverState: state,
             })
         } catch (err) {
             this.showError(err)
@@ -80,6 +81,12 @@ class AppContextProvider extends React.Component {
                 history.replace(location.state.from)
             }
         }
+    }
+
+    handleServerStateUpdate = (serverState) => {
+        this.setState({
+            serverState,
+        })
     }
 
     showMessage = (msg, options) => {
@@ -118,9 +125,7 @@ class AppContextProvider extends React.Component {
                     socket,
                 }}
             >
-                <ThemeProvider>
-                    {this.props.children}
-                </ThemeProvider>
+                {this.props.children}
             </AppContext.Provider>
         )
     }
