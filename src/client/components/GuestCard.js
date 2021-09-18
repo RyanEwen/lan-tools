@@ -1,13 +1,10 @@
-import Button from '@material-ui/core/Button'
 import Card from '@material-ui/core/Card'
-import CardActions from '@material-ui/core/CardActions'
 import CardContent from '@material-ui/core/CardContent'
-import Grid from '@material-ui/core/Grid'
 import { makeStyles } from '@material-ui/core/styles'
 import Typography from '@material-ui/core/Typography'
-import React, { useState } from 'react'
+import React from 'react'
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles({
     card: {
         display: 'flex',
         flexDirection: 'column',
@@ -20,7 +17,7 @@ const useStyles = makeStyles((theme) => ({
         display: 'flex',
         justifyContent: 'space-between',
     },
-}))
+})
 
 export default function GuestCard(props) {
     const { guest } = props
