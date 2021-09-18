@@ -3,10 +3,9 @@
     "version": "1.0.0",
     "main": "dist/server/Server.bundle.js",
     "scripts": {
-        "start": "node $npm_package_main",
-        "kill": "pkill -f $npm_package_main || true",
         "build-dev": "webpack --config webpack.config.js --mode development --watch",
-        "build-prod": "webpack --config webpack.config.js --mode production"
+        "build-prod": "webpack --config webpack.config.js --mode production",
+        "start": "node $npm_package_main"
     },
     "devDependencies": {
         "@babel/core": "^7.15.5",
