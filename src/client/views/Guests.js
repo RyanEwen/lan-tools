@@ -6,6 +6,7 @@ import MenuBookIcon from '@material-ui/icons/MenuBook'
 import React from 'react'
 import Grid from '@material-ui/core/Grid'
 import Link from '@material-ui/core/Link'
+import Box from '@material-ui/core/Box'
 import Breadcrumbs from '@material-ui/core/Breadcrumbs'
 import { Link as RouterLink, Route, Switch, useParams, useRouteMatch, withRouter } from "react-router-dom"
 import { withAppContext } from '../context/AppContextProvider'
@@ -18,7 +19,17 @@ const styles = (theme) => ({
     breadcrumbs: {
         marginTop: theme.spacing(2),
     },
+    guestBox: {
+        marginTop: theme.spacing(2),
+    },
 })
+
+const searchProperties = [
+    'name',
+    'nicknames',
+    'ipAddress',
+    'hostname',
+]
 
 class Guests extends React.Component {
     state = {
@@ -32,7 +43,7 @@ class Guests extends React.Component {
         const url = match.path
         const filterPattern = new RegExp("(?=.*?\\b" + filterTerm.split(" ").join(")(?=.*?\\b") + ").*", "i")
         const filteredGuests = !filterTerm.length ? guests : guests.filter(guest => {
-            return guest.name.match(filterPattern)
+            return _.flatten(_.values(_.pick(guest, searchProperties))).join(' ').match(filterPattern)
         })
 
         return (
@@ -73,7 +84,9 @@ class Guests extends React.Component {
                         </List>
                     </Route>
                     <Route path={`${url}/:guestId`}>
-                        <MyGuestCard guests={guests} />
+                        <Box className={classes.guestBox}>
+                            <MyGuestCard guests={guests} />
+                        </Box>
                     </Route>
                 </Switch>
             </Container>
