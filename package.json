@@ -30,7 +30,7 @@
         "file-loader": "^4.3.0",
         "html-webpack-partials-plugin": "^0.5.6",
         "html-webpack-plugin": "^4.3.0",
-        "notistack": "^0.9.11",
+        "notistack": "^1.0.10",
         "postcss-loader": "^3.0.0",
         "react": "^17.0.2",
         "react-dom": "^17.0.2",
