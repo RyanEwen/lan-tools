@@ -16,7 +16,7 @@ import Typography from '@material-ui/core/Typography'
 import AccountCircleIcon from '@material-ui/icons/AccountCircle'
 import MenuIcon from '@material-ui/icons/Menu'
 import React from "react"
-import { Link as RouterLink, Route, Switch, withRouter } from "react-router-dom"
+import { Link as RouterLink, Route, Switch, Redirect, withRouter } from "react-router-dom"
 import Copyright from '../components/Copyright'
 import NavListItem from '../components/NavListItem'
 import NavMenuItem from '../components/NavMenuItem'
@@ -183,8 +183,8 @@ class App extends React.Component {
                             {/* Private views */}
 
                             <PrivateRoute path={paths.root} exact>
-                                <Guests />
                                 {/* <Welcome /> */}
+                                <Redirect to={paths.guests} />
                             </PrivateRoute>
 
                             <PrivateRoute path={paths.guests}>
