@@ -1,3 +1,5 @@
+import dns from 'dns'
+
 class Utilities {
     static isLoggedIn(socket, session) {
         return !!socket.userId
@@ -7,6 +9,18 @@ class Utilities {
         if (!this.isLoggedIn(socket, session)) {
             throw new Error('You are not logged in')
         }
+    }
+
+    static async getHostname(ip) {
+        return new Promise((res, rej) => {
+            dns.reverse(ip, (err, hostnames) => {
+                if (err) {
+                    res([])
+                }
+
+                res(hostnames)
+            })
+        })
     }
 }
 

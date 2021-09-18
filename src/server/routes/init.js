@@ -13,9 +13,11 @@ export default async function (socket, session, message = {}) {
     socket.join(session.id)
 
     if (Utilities.isLoggedIn(socket, session)) {
+        const hostnames = await Utilities.getHostname(socket.request.connection.remoteAddress)
+
         const user = await User.findByPk(socket.userId)
         user.ipAddress = socket.request.connection.remoteAddress
-        user.hostname = socket.handshake.headers.host.split(":").shift()
+        user.hostname = hostnames[0] || 'n/a'
 
         const userChanged = user.changed()
 
