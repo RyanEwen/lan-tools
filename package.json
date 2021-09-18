@@ -7,6 +7,9 @@
         "build-prod": "webpack --config webpack.config.js --mode production",
         "start": "node $npm_package_main"
     },
+    "nodemonConfig": {
+        "watch": "dist/server"
+    },
     "devDependencies": {
         "@babel/core": "^7.15.5",
         "@babel/plugin-proposal-class-properties": "^7.14.5",
