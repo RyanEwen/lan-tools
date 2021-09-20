@@ -1,10 +1,16 @@
 import sharedsession from 'express-socket.io-session'
 import socketio from 'socket.io'
-import routes from './routes'
 import sessionHandler from './session'
+import routes from './routes'
 
-export default function (server) {
-    const io = socketio(server)
+var io
+
+export default function getSocketio (server) {
+    if (io) {
+        return io
+    }
+
+    io = socketio(server)
 
     io.use(sharedsession(sessionHandler))
 
@@ -40,6 +46,8 @@ export default function (server) {
             })
         })
     })
+
+    console.log('SocketIO started')
 
     return io
 }

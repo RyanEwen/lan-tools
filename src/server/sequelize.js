@@ -11,7 +11,7 @@ const mysqlInfo = {
     dbname: process.env.DBNAME || 'app',
 }
 
-function createDatabaseIfNotExists() {
+export async function setupDatabase() {
     const connection = mysql2.createConnection({
         host: mysqlInfo.host,
         port: mysqlInfo.port,
@@ -19,15 +19,13 @@ function createDatabaseIfNotExists() {
         password: mysqlInfo.pass,
     })
 
-    connection.query(`CREATE DATABASE IF NOT EXISTS \`${mysqlInfo.dbname}\`;`)
+    await connection.promise().query(`CREATE DATABASE IF NOT EXISTS \`${mysqlInfo.dbname}\`;`)
 }
 
-export default function () {
+export default function getSequelize () {
     if (sequelize) {
         return sequelize
     }
-
-    createDatabaseIfNotExists()
 
     sequelize = new Sequelize(
         mysqlInfo.dbname,
@@ -41,8 +39,8 @@ export default function () {
         }
     )
 
-    sequelize.sync({ alter: true }).catch((err) => {
-        throw new Error('Unable to connect to the database:', err)
+    sequelize.sync({ alter: true }).then(() => {
+        console.log('Sequelize initialized')
     })
 
     return sequelize

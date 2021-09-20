@@ -2,7 +2,13 @@ import express from 'express'
 import path from 'path'
 import sessionHandler from './session'
 
-export default function () {
+var server
+
+export default function getServer () {
+    if (server) {
+        return server
+    }
+
     const app = express()
 
     app.use(sessionHandler)
@@ -18,7 +24,9 @@ export default function () {
         res.sendFile(path.join(__dirname, '..', 'client', 'index.html'))
     })
 
-    const server = app.listen(process.env.PORT || 3000, process.env.INTERFACE || '0.0.0.0')
+    server = app.listen(process.env.PORT || 3000, process.env.INTERFACE || '0.0.0.0')
+
+    console.log('Express started')
 
     return server
 }
