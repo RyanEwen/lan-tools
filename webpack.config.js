@@ -5,7 +5,6 @@ const CompressionPlugin = require('compression-webpack-plugin')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 const HtmlWebpackPartialsPlugin = require('html-webpack-partials-plugin')
 const nodeExternals = require('webpack-node-externals')
-// const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin
 
 const serverConfig = {
     target: 'node',
@@ -76,9 +75,6 @@ const clientConfig = {
         new CompressionPlugin({
             test: /\.(js|css|html|svg)$/,
         }),
-        // new BundleAnalyzerPlugin({
-        //     analyzerMode: 'static'
-        // })
     ],
     module: {
         rules: [
