@@ -1,4 +1,4 @@
-FROM node:14.17.3
+FROM node:16.6.0
 
 WORKDIR /usr/src/app
 
@@ -8,4 +8,4 @@ RUN npm install -q
 
 RUN npm run build-prod
 
-CMD ["npm", "start"]
+CMD ["node", "."]
