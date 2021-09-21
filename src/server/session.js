@@ -1,8 +1,6 @@
 import SequelizeStore from 'connect-session-sequelize'
 import session from 'express-session'
-import getSequelize from './sequelize'
-
-const sequelize = getSequelize()
+import sequelize from './sequelize'
 
 const sessionStore = new (SequelizeStore(session.Store))({
     db: sequelize,

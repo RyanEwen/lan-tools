@@ -11,8 +11,8 @@ export default async function (socket, session, message) {
         'Nicknames': message.nicknames,
     })
 
-    // update profile
-    const user = await User.findByPk(socket.userId)
+    // get and update user
+    const user = await User.findByPk(session.passport.user)
     user.name = message.name
     user.nicknames = message.nicknames
 
@@ -21,8 +21,11 @@ export default async function (socket, session, message) {
     await user.save()
 
     if (userChanged) {
-        socket.server.to(session.id).emit('session', { user })
-        socket.server.to('general').emit('state', await getState())
+        // get latest state
+        const state = await getState()
+
+        socket.server.to(`user-${user.id}`).emit('user', user)
+        socket.server.to('general').emit('state', state)
     }
 
     console.log('User updated account details', session)

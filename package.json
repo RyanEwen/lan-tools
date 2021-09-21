@@ -45,7 +45,7 @@
     },
     "dependencies": {
         "body-parser": "^1.19.0",
-        "connect-session-sequelize": "^6.1.1",
+        "connect-session-sequelize": "^7.1.2",
         "crypto-random-string": "^3.2.0",
         "discord.js": "^13.1.0",
         "dotenv": "^10.0.0",
@@ -60,8 +60,10 @@
         "natural-orderby": "^2.0.3",
         "nodemon": "^2.0.12",
         "passport": "^0.4.1",
-        "passport-auth0": "^1.4.0",
-        "sequelize": "^5.21.7",
+        "passport-discord": "^0.1.4",
+        "passport-oauth2-refresh": "^2.1.0",
+        "react-social-login-buttons": "^3.5.1",
+        "sequelize": "^6.6.5",
         "socket.io": "^2.3.0",
         "typeface-roboto": "0.0.75"
     },

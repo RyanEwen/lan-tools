@@ -10,8 +10,7 @@ import stringToColor from 'string-to-color'
 const useStyles = makeStyles({
     avatar: (props) => ({
         backgroundColor: stringToColor(
-            // guest initials
-            props.guest.name.split(' ').map(name => name[0]).join('').toUpperCase()
+            props.guest.name.split(' ').map(name => name[0]).join('').toUpperCase() // guest initials
         ),
     }),
     body: {
@@ -22,13 +21,16 @@ const useStyles = makeStyles({
     },
     addresses: {
         textAlign: 'right',
-        // color: grey[500],
+    },
+    activityType: {
+        textTransform: 'capitalize',
     },
 })
 
 export default function GuestListItem(props) {
     const { guest, onClick } = props
     const classes = useStyles(props)
+    const activity = guest.discordPresence?.activities[0]
 
     function handleClick() {
         onClick(guest)
@@ -41,13 +43,16 @@ export default function GuestListItem(props) {
             onClick={handleClick}
         >
             <ListItemAvatar>
-                <Avatar alt={guest.name} classes={{ root: classes.avatar }}>{guest.name[0].toUpperCase()}</Avatar>
+                <Avatar classes={{ root: classes.avatar }} alt={guest.name} src={`https://cdn.discordapp.com/avatars/${guest.discordId}/${guest.discordAvatar}.jpg`}>
+                    <Avatar classes={{ root: classes.avatar }} alt={guest.name}>{guest.name[0].toUpperCase()}</Avatar>
+                </Avatar>
             </ListItemAvatar>
             <ListItemText
                 primary={guest.name}
                 secondary={<span className={classes.body}>{guest.nicknames.join(', ')}</span>}
             />
             <div className={classes.addresses}>
+                <Typography><span className={classes.activityType}>{activity?.type?.toLowerCase()}</span> {activity?.name}</Typography>
                 <Typography>{guest.ipAddress}</Typography>
                 <Typography>{guest.hostname}</Typography>
             </div>

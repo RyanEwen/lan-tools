@@ -2,7 +2,7 @@ import dns from 'dns'
 
 class Utilities {
     static isLoggedIn(socket, session) {
-        return !!socket.userId
+        return !!session.passport?.user
     }
 
     static async requireLogin(socket, session) {

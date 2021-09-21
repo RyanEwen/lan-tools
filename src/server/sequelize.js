@@ -1,47 +1,24 @@
 import mysql2 from 'mysql2'
 import Sequelize from 'sequelize'
+import dotenv from 'dotenv'
 
-var sequelize
+dotenv.config()
 
-const mysqlInfo = {
-    host: process.env.DBHOST || 'localhost',
-    port: process.env.DBPORT || 3306,
-    user: process.env.DBUSER || 'root',
-    pass: process.env.DBPASS || 'example',
-    dbname: process.env.DBNAME || 'app',
-}
-
-export async function setupDatabase() {
-    const connection = mysql2.createConnection({
-        host: mysqlInfo.host,
-        port: mysqlInfo.port,
-        user: mysqlInfo.user,
-        password: mysqlInfo.pass,
-    })
-
-    await connection.promise().query(`CREATE DATABASE IF NOT EXISTS \`${mysqlInfo.dbname}\`;`)
-}
-
-export default function getSequelize () {
-    if (sequelize) {
-        return sequelize
+var sequelize = new Sequelize(
+    process.env.DATABASE_NAME,
+    process.env.DATABASE_USER,
+    process.env.DATABASE_PASS,
+    {
+        host: process.env.DATABASE_HOST,
+        port: process.env.DATABASE_PORT,
+        dialect: 'mysql',
+        dialectModule: mysql2,
+        logging: false, // TODO log somewhere
     }
+)
 
-    sequelize = new Sequelize(
-        mysqlInfo.dbname,
-        mysqlInfo.user,
-        mysqlInfo.pass,
-        {
-            host: mysqlInfo.host,
-            dialect: 'mysql',
-            dialectModule: mysql2,
-            logging: false, // TODO log somewhere
-        }
-    )
+sequelize.sync({ alter: true }).then(() => {
+    console.log('Sequelize initialized')
+})
 
-    sequelize.sync({ alter: true }).then(() => {
-        console.log('Sequelize initialized')
-    })
-
-    return sequelize
-}
+export default sequelize

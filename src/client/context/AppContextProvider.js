@@ -23,8 +23,9 @@ class AppContextProvider extends React.Component {
 
         this.paths = {
             root: `${url}`,
-            register: `${url}/register`,
             login: `${url}/login`,
+            auth: `/login`,
+            logout: `/logout`,
             account: `${url}/account`,
             guests: `${url}/guests`,
         }
@@ -33,17 +34,17 @@ class AppContextProvider extends React.Component {
     componentDidMount = async () => {
         this.unbindConnect = socket.on('connect', this.handleConnect)
         this.unbindDisconnect = socket.on('disconnect', this.handleDisconnect)
-        this.unbindSession = socket.on('session', this.handleSessionUpdate)
+        this.unbindUser = socket.on('user', this.handleUserUpdate)
         this.unbindServerState = socket.on('state', this.handleServerStateUpdate)
     }
 
     componentWillUnmount = () => {
         this.unbindConnect()
-        this.unbindSession()
+        this.unbindUser()
         this.unbindServerState()
     }
 
-    initialFetch = async () => {
+    handleConnect = async () => {
         try {
             const { user, state } = await socket.send('init')
 
@@ -58,29 +59,16 @@ class AppContextProvider extends React.Component {
         }
     }
 
-    handleConnect = () => {
-        this.initialFetch()
-    }
-
     handleDisconnect = () => {
         this.setState({
             connected: false,
         })
     }
 
-    handleSessionUpdate = ({ user }) => {
-        const { history, location } = this.props
-
+    handleUserUpdate = (user) => {
         this.setState({
             user,
         })
-
-        // go to to previous view if session was populated
-        if (user && !this.state.user) {
-            if (location.state) {
-                history.replace(location.state.from)
-            }
-        }
     }
 
     handleServerStateUpdate = (serverState) => {

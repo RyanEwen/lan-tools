@@ -1,9 +1,17 @@
 import Sequelize from 'sequelize'
-import getSequelize from '../sequelize'
+import sequelize from '../sequelize'
 
 class User extends Sequelize.Model {}
 
 User.init({
+    discordId: {
+        type: Sequelize.STRING(64),
+        unique: 'user',
+        allowNull: false,
+    },
+    discordAvatar: {
+        type: Sequelize.STRING(255),
+    },
     email: {
         type: Sequelize.STRING(64),
         unique: 'user',
@@ -46,7 +54,7 @@ User.init({
         allowNull: true,
     },
 }, {
-    sequelize: getSequelize(),
+    sequelize,
     modelName: 'User',
     paranoid: true,
 })

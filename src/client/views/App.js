@@ -15,20 +15,18 @@ import Tooltip from '@material-ui/core/Tooltip'
 import Typography from '@material-ui/core/Typography'
 import AccountCircleIcon from '@material-ui/icons/AccountCircle'
 import MenuIcon from '@material-ui/icons/Menu'
+import MenuItem from '@material-ui/core/MenuItem'
 import React from "react"
 import { Link as RouterLink, Route, Switch, Redirect, withRouter } from "react-router-dom"
 import Copyright from '../components/Copyright'
 import NavListItem from '../components/NavListItem'
 import NavMenuItem from '../components/NavMenuItem'
 import PrivateRoute from '../components/PrivateRoute'
-import PublicRoute from '../components/PublicRoute'
 import { withAppContext } from '../context/AppContextProvider'
 import NotFound from './404'
 import Account from './Account'
-import Login from './Login'
 import Guests from './Guests'
-import Register from './Register'
-import Welcome from './Welcome'
+// import Welcome from './Welcome'
 
 const styles = (theme) => ({
     appBar: {
@@ -109,7 +107,7 @@ class App extends React.Component {
     }
 
     render() {
-        const { classes, history, paths, initialized, connected, user } = this.props
+        const { classes, paths, initialized, connected, user } = this.props
         const { drawerOpen, menuAnchor } = this.state
 
         if (!initialized) {
@@ -161,7 +159,7 @@ class App extends React.Component {
                         {user &&
                             <Menu anchorEl={menuAnchor} open={!!menuAnchor} onClose={this.closeMenu}>
                                 <NavMenuItem onClick={this.closeMenu} to={paths.account}>My Account</NavMenuItem>
-                                <NavMenuItem onClick={() => { this.closeMenu(); this.props.socket.send('logout') }} to={paths.root}>Logout</NavMenuItem>
+                                <MenuItem onClick={() => { window.location.href = paths.logout }}>Logout</MenuItem>
                             </Menu>
                         }
                     </Toolbar>
@@ -170,16 +168,6 @@ class App extends React.Component {
                 <Box ref={this.scrollPaneRef} className={classes.outerBox}>
                     <Box className={classes.innerBox}>
                         <Switch>
-                            {/* Public views */}
-
-                            <PublicRoute path={paths.login}>
-                                <Login />
-                            </PublicRoute>
-
-                            <PublicRoute path={paths.register}>
-                                <Register />
-                            </PublicRoute>
-
                             {/* Private views */}
 
                             <PrivateRoute path={paths.root} exact>
