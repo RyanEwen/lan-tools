@@ -5,14 +5,14 @@ import mysql2 from 'mysql2'
 import express from 'express'
 import sessionHandler from './session'
 import passport from 'passport'
-// import refresh from 'passport-oauth2-refresh'
 import DiscordStrategy from 'passport-discord'
 import User from './models/User'
 import sharedsession from 'express-socket.io-session'
 import socketio from 'socket.io'
 import routes from './routes'
-import getState from './routes/state'
+import getState from './state'
 import dotenv from 'dotenv'
+import getDiscordClient from './discord'
 
 (async () => {
     try {
@@ -38,8 +38,6 @@ import dotenv from 'dotenv'
             },
             async function (accessToken, refreshToken, profile, cb) {
                 try {
-                    // profile.refreshToken = refreshToken
-
                     const [user, userIsNew] = await User.upsert({
                         discordId: profile.id,
                         discordAvatar: profile.avatar,
@@ -59,16 +57,6 @@ import dotenv from 'dotenv'
 
         passport.use(discordStrat)
 
-        // refresh.use(discordStrat)
-
-        // refresh.requestNewAccessToken('discord', profile.refreshToken, function (err, accessToken, refreshToken) {
-        //     if (err) {
-        //         throw new Error(err)
-        //     }
-
-        //     profile.accessToken = accessToken
-        // })
-
         passport.serializeUser((user, cb) => {
             cb(null, user.id)
         })
@@ -82,7 +70,8 @@ import dotenv from 'dotenv'
             })
         })
 
-        // setup web server
+        // SETUP WEB SERVER
+
         const app = express()
 
         app.set('trust proxy', true)
@@ -117,14 +106,14 @@ import dotenv from 'dotenv'
             passport.authenticate('discord', { failureRedirect: '/auth/discord' }),
             // find already-connected sockets and update them of successful login
             function (req, res) {
-                const sessionSockets = Object.values(wsserver.sockets.connected).filter(socket => socket.handshake.session.id == req.session.id)
+                const sessionSockets = Object.values(websockets.sockets.connected).filter(socket => socket.handshake.session.id == req.session.id)
 
                 sessionSockets.forEach(async (socket) => {
                     socket.join(`user-${req.session.passport.user}`)
                     socket.join('general')
 
-                    socket.emit('state', await getState())
                     socket.emit('user', req.user)
+                    socket.emit('state', await getState())
                 })
 
                 console.log('User logged in', req.session)
@@ -135,7 +124,7 @@ import dotenv from 'dotenv'
 
         // logout route
         app.get('/logout', function (req, res) {
-            const sessionSockets = Object.values(wsserver.sockets.connected).filter(socket => socket.handshake.session.id == req.session.id)
+            const sessionSockets = Object.values(websockets.sockets.connected).filter(socket => socket.handshake.session.id == req.session.id)
 
             sessionSockets.forEach(socket => {
                 socket.leave(`user-${req.session.passport.user}`)
@@ -143,6 +132,9 @@ import dotenv from 'dotenv'
 
                 socket.emit('user', null)
                 socket.emit('state', null)
+
+                socket.leave(`user-${req.session.passport.user}`)
+                socket.leave('general')
             })
 
             req.logout()
@@ -157,16 +149,17 @@ import dotenv from 'dotenv'
             res.sendFile(path.join(__dirname, '..', 'client', 'index.html'))
         })
 
-        const webserver = app.listen(process.env.PORT || 3000, process.env.INTERFACE || '0.0.0.0')
+        const http = app.listen(process.env.PORT || 3000, process.env.INTERFACE || '0.0.0.0')
 
         console.log('Express started')
 
-        // setup websocket server
-        const wsserver = socketio(webserver)
+        // SETUP WEBSOCKET SERVER
 
-        wsserver.use(sharedsession(sessionHandler))
+        const websockets = socketio(http)
 
-        wsserver.on('connection', function (socket) {
+        websockets.use(sharedsession(sessionHandler))
+
+        websockets.on('connection', function (socket) {
             console.log('Socket connected', socket.id, socket.handshake.session.id)
 
             const interval = setInterval(() => {
@@ -184,7 +177,7 @@ import dotenv from 'dotenv'
             })
         })
 
-        wsserver.on('connection', async function (socket) {
+        websockets.on('connection', async function (socket) {
             // bind each route to a socketio event of the same name
             Object.keys(routes).forEach(routeName => {
                 socket.on(routeName, async function (message, res) {
@@ -192,7 +185,7 @@ import dotenv from 'dotenv'
                         // pass the socket, session, and message to the route
                         const response = await routes[routeName](socket, socket.handshake.session, message)
 
-                        // pass the route's response back to the browser
+                        // pass the route's response back to the client
                         res(response)
 
                     } catch (err) {

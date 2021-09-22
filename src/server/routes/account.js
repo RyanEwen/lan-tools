@@ -1,7 +1,7 @@
 import SharedUtilities from '../../shared/classes/SharedUtilities'
 import Utilities from '../classes/Utilities'
 import User from '../models/User'
-import getState from './state'
+import getState from '../state'
 
 export default async function (socket, session, message) {
     await Utilities.requireLogin(socket, session, false)

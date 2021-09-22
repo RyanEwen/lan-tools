@@ -1,6 +1,6 @@
 import Utilities from '../classes/Utilities'
 import User from '../models/User'
-import getState from './state'
+import getState from '../state'
 
 export default async function (socket, session, message = {}) {
     // do stuff that normally happens during login, in case this socket was created while already-logged-in
