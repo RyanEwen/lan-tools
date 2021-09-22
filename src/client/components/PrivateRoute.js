@@ -4,13 +4,13 @@ import { AppContext } from '../context/AppContextProvider'
 import Login from '../views/Login'
 
 export default function PrivateRoute({ children, disabled = false, ...otherProps }) {
-    const { paths, user } = useContext(AppContext)
+    const { paths, user, serverState } = useContext(AppContext)
 
     return (
         <Route
             {...otherProps}
             render={({ location }) => {
-                if (!disabled && user) {
+                if (!disabled && user && serverState) {
                     return children
                 }
 
