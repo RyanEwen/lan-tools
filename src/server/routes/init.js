@@ -28,6 +28,7 @@ export default async function (socket, session, message = {}) {
         socket.join('general')
 
         return { user, state }
+
     } else {
         return { user: null, state: null }
     }
