@@ -36,7 +36,7 @@ import getDiscordClient from './discord'
                 callbackURL: process.env.DISCORD_CALLBACK_URL,
                 scope: ['identify', 'email'],
             },
-            async function (accessToken, refreshToken, profile, cb) {
+            async (accessToken, refreshToken, profile, cb) => {
                 try {
                     const [user, userIsNew] = await User.upsert({
                         discordId: profile.id,
@@ -89,7 +89,7 @@ import getDiscordClient from './discord'
         // login route
         app.get('/login',
             // check if already logged in
-            function (req, res, next) {
+            (req, res, next) => {
                 if (!req.isAuthenticated()) {
                     return next()
                 }
@@ -105,8 +105,9 @@ import getDiscordClient from './discord'
             // finish oauth2 auth
             passport.authenticate('discord', { failureRedirect: '/auth/discord' }),
             // find already-connected sockets and update them of successful login
-            function (req, res) {
-                const sessionSockets = Object.values(websockets.sockets.connected).filter(socket => socket.handshake.session.id == req.session.id)
+            async (req, res) => {
+                const sockets = await websockets.fetchSockets()
+                const sessionSockets = sockets.filter(socket => socket.handshake.session.id == req.session.id)
 
                 sessionSockets.forEach(async (socket) => {
                     socket.join(`user-${req.session.passport.user}`)
@@ -123,13 +124,11 @@ import getDiscordClient from './discord'
         )
 
         // logout route
-        app.get('/logout', function (req, res) {
-            const sessionSockets = Object.values(websockets.sockets.connected).filter(socket => socket.handshake.session.id == req.session.id)
+        app.get('/logout', async (req, res) => {
+            const sockets = await websockets.fetchSockets()
+            const sessionSockets = sockets.filter(socket => socket.handshake.session.id == req.session.id)
 
             sessionSockets.forEach(socket => {
-                socket.leave(`user-${req.session.passport.user}`)
-                socket.leave('general')
-
                 socket.emit('user', null)
                 socket.emit('state', null)
 
@@ -159,7 +158,7 @@ import getDiscordClient from './discord'
 
         websockets.use(sharedsession(sessionHandler))
 
-        websockets.on('connection', function (socket) {
+        websockets.on('connection', (socket) => {
             console.log('Socket connected', socket.id, socket.handshake.session.id)
 
             const interval = setInterval(() => {
@@ -177,10 +176,10 @@ import getDiscordClient from './discord'
             })
         })
 
-        websockets.on('connection', async function (socket) {
+        websockets.on('connection', async (socket) => {
             // bind each route to a socketio event of the same name
             Object.keys(routes).forEach(routeName => {
-                socket.on(routeName, async function (message, res) {
+                socket.on(routeName, async (message, res) => {
                     try {
                         // pass the socket, session, and message to the route
                         const response = await routes[routeName](socket, socket.handshake.session, message)
