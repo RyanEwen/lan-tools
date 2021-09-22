@@ -5,7 +5,7 @@ import mysql2 from 'mysql2'
 import express from 'express'
 import sessionHandler from './session'
 import passport from 'passport'
-import refresh from 'passport-oauth2-refresh'
+// import refresh from 'passport-oauth2-refresh'
 import DiscordStrategy from 'passport-discord'
 import User from './models/User'
 import sharedsession from 'express-socket.io-session'
@@ -196,10 +196,7 @@ import dotenv from 'dotenv'
                         res(response)
 
                     } catch (err) {
-                        // log errors to console only when in dev
-                        if (process.env.NODE_ENV !== 'production') {
-                            console.error(err)
-                        }
+                        console.error(err)
 
                         // normalize sequelize errors
                         if (err.name === 'SequelizeValidationError') {
