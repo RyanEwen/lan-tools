@@ -1,5 +1,6 @@
 console.log(`Starting in ${process.env.NODE_ENV} mode`)
 
+import _ from 'lodash'
 import path from 'path'
 import mysql2 from 'mysql2'
 import express from 'express'
@@ -12,7 +13,7 @@ import socketio from 'socket.io'
 import routes from './routes'
 import getState from './state'
 import dotenv from 'dotenv'
-import getDiscordClient from './discord'
+import getDiscordClient, { updatePresence } from './discord'
 
 (async () => {
     try {
@@ -207,6 +208,46 @@ import getDiscordClient from './discord'
         })
 
         console.log('SocketIO started')
+
+        // SETUP DISCORD CLIENT
+
+        const discordClient = await getDiscordClient()
+
+        // listen for member presence updates
+        discordClient.on('presenceUpdate', async (oldPresence, newPresence) => {
+            console.log('Discord presence update', oldPresence, newPresence)
+
+            // check if a user for this member exists within the app
+            const user = await User.findOne({
+                where: {
+                    discordId: oldPresence.user.id,
+                },
+            })
+
+            // if not a user in the app then who cares
+            if (!user) {
+                return
+            }
+
+            // send updated state to all logged-in users
+            websockets.to('general').emit('state', await getState())
+        })
+
+        // update discord status as people connect
+        websockets.on('connection', async (socket) => {
+            countUsersAndUpdatePresence()
+
+            socket.on('disconnect', async () => {
+                countUsersAndUpdatePresence()
+            })
+
+            async function countUsersAndUpdatePresence() {
+                const sockets = await websockets.fetchSockets()
+                const userIds = _.uniq(sockets.map(socket => socket.handshake.session.passport.user).filter(userId => userId))
+
+                updatePresence(userIds.length)
+            }
+        })
 
     } catch (err) {
         console.error(err)

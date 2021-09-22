@@ -1,6 +1,24 @@
 import Discord from 'discord.js'
 
 var client
+var lastUserCount = 0
+
+export async function updatePresence(userCount) {
+    // use cache to prevent pointless updates
+    if (userCount == lastUserCount) {
+        return
+    }
+
+    // update cache
+    lastUserCount = userCount
+
+    // set or clear presence
+    if (userCount) {
+        client.user.setActivity(`${userCount} users in app!`, { type: 'WATCHING' })
+    } else {
+        client.user.setActivity(null)
+    }
+}
 
 export default async function getDiscordClient () {
     if (client) {
@@ -13,6 +31,9 @@ export default async function getDiscordClient () {
             Discord.Intents.FLAGS.GUILD_MEMBERS,
             Discord.Intents.FLAGS.GUILD_PRESENCES,
         ],
+        presence: {
+            activity: null,
+        },
     })
 
     await client.login(process.env.DISCORD_TOKEN)
