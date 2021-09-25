@@ -10,28 +10,27 @@ export const socket = getSocketio()
 
 class AppContextProvider extends React.Component {
     state = {
+        paths: null,
         connected: false,
         initialized: false,
         user: null,
         serverState: null,
     }
 
-    constructor(props) {
-        super(props)
+    componentDidMount = () => {
+        const { url, params } = this.props.match
 
-        const { match: { url } } = props
+        this.setState({
+            paths: {
+                root: `${url}`,
+                login: `${url}/login`,
+                auth: `/login`,
+                logout: `/logout`,
+                account: `${url}/account`,
+                guests: `${url}/guests`,
+            },
+        })
 
-        this.paths = {
-            root: `${url}`,
-            login: `${url}/login`,
-            auth: `/login`,
-            logout: `/logout`,
-            account: `${url}/account`,
-            guests: `${url}/guests`,
-        }
-    }
-
-    componentDidMount = async () => {
         this.unbindConnect = socket.on('connect', this.handleConnect)
         this.unbindDisconnect = socket.on('disconnect', this.handleDisconnect)
         this.unbindUser = socket.on('user', this.handleUserUpdate)
@@ -102,6 +101,11 @@ class AppContextProvider extends React.Component {
     closeSnackbar = this.props.closeSnackbar
 
     render() {
+        // wait until component has mounted
+        if (!this.state.paths) {
+            return <></>
+        }
+
         return (
             <AppContext.Provider
                 value={{
@@ -109,7 +113,6 @@ class AppContextProvider extends React.Component {
                     showMessage: this.showMessage,
                     showError: this.showError,
                     closeSnackbar: this.closeSnackbar,
-                    paths: this.paths,
                     socket,
                 }}
             >
