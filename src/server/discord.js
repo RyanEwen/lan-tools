@@ -4,6 +4,8 @@ var client
 var lastUserCount = 0
 
 export async function updatePresence(userCount) {
+    const discordClient = await getDiscordClient()
+
     // use cache to prevent pointless updates
     if (userCount == lastUserCount) {
         return
@@ -14,9 +16,9 @@ export async function updatePresence(userCount) {
 
     // set or clear presence
     if (userCount) {
-        client.user.setActivity(`${userCount} users in app!`, { type: 'WATCHING' })
+        discordClient.user.setActivity(`${userCount} users in app!`, { type: 'WATCHING' })
     } else {
-        client.user.setActivity(null)
+        discordClient.user.setActivity(null)
     }
 }
 
