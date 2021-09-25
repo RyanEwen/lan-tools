@@ -10,7 +10,7 @@ export default async function (socket, session, message = {}) {
         // get and update user
         const user = await User.findByPk(session.passport.user)
         user.ipAddress = socket.request.connection.remoteAddress
-        user.hostname = hostnames[0] || 'n/a'
+        user.hostname = hostnames[0] || ''
 
         const userChanged = user.changed()
 
