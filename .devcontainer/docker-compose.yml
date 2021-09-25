@@ -4,6 +4,7 @@ services:
   db:
     image: mariadb
     environment:
+      TZ: America/Toronto
       MYSQL_ROOT_PASSWORD: example
     restart: unless-stopped
 
@@ -11,6 +12,8 @@ services:
     image: adminer
     depends_on:
       - db
+    environment:
+      TZ: America/Toronto
     ports:
       - 8080:8080
     restart: unless-stopped
@@ -21,6 +24,7 @@ services:
       - ..:/usr/src/app:cached
       - ~/.ssh:/home/node/.ssh
     environment:
+      TZ: America/Toronto
       NODE_ENV: development
       DBHOST: 'db'
       # BASEURL: 'test'
