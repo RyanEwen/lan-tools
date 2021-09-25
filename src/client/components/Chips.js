@@ -26,8 +26,8 @@ const actionKeys = [
 
 export default function Chips(props) {
     const { chips, onChipAdd, onChipClick, onChipRemove, ...otherProps } = props
+    let [ value, setValue ] = useState('')
     const classes = useStyles()
-    let [value, setValue] = useState('')
 
     return <>
         <Grid container spacing={2}>

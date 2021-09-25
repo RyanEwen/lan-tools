@@ -7,7 +7,7 @@ import React, { useState } from 'react'
 
 export default function PasswordField(props) {
     const { type, ...otherProps } = props
-    const [showPassword, setShowPassword] = useState(false)
+    const [ showPassword, setShowPassword ] = useState(false)
 
     return (
         <TextField

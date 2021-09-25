@@ -27,8 +27,8 @@ const useStyles = makeStyles((theme) => ({
 
 export default function Account(props) {
     const { user, showMessage, showError, socket } = useContext(AppContext)
-    const [waiting, setWaiting] = useState(false)
-    const [nicknames, setNicknames] = useState(user.nicknames)
+    const [ waiting, setWaiting ] = useState(false)
+    const [ nicknames, setNicknames ] = useState(user.nicknames)
     const classes = useStyles()
 
     const handleNicknameAdd = async (value) => {
