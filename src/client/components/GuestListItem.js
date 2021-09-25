@@ -7,7 +7,7 @@ import ListItemText from '@material-ui/core/ListItemText'
 import Typography from '@material-ui/core/Typography'
 import stringToColor from 'string-to-color'
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles(theme => ({
     avatar: (props) => ({
         backgroundColor: stringToColor(
             props.guest.name.split(' ').map(name => name[0]).join('').toUpperCase() // guest initials
@@ -53,10 +53,14 @@ export default function GuestListItem(props) {
             </ListItemAvatar>
             <ListItemText
                 primary={guest.name}
-                secondary={<span className={classes.body}>{guest.nicknames.join(', ')}</span>}
+                secondary={<>
+                    <span className={classes.body}>{guest.nicknames.join(', ')}</span>
+                    {activity &&
+                        <Typography className={classes.activity} variant="subtitle2"><span className={classes.activityType}>{activity.type?.toLowerCase()}</span> {activity.name}</Typography>
+                    }
+                </>}
             />
             <div className={classes.addresses}>
-                <Typography className={classes.activity}><span className={classes.activityType}>{activity?.type?.toLowerCase()}</span> {activity?.name}</Typography>
                 <Typography>{guest.ipAddress}</Typography>
                 <Typography>{guest.hostname}</Typography>
             </div>
