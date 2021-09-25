@@ -16,7 +16,7 @@ services:
     restart: unless-stopped
 
   app:
-    build: ./
+    image: node:16.6.0
     volumes:
       - ..:/usr/src/app:cached
       - ~/.ssh:/home/node/.ssh

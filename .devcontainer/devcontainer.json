@@ -1,12 +1,13 @@
 {
-	"name": "Node.js & Maria DB",
-	"dockerComposeFile": "docker-compose.yml",
-	"service": "app",
-	"workspaceFolder": "/usr/src/app",
-	"settings": {},
-	"extensions": [
-		"dbaeumer.vscode-eslint",
-	],
-	"remoteUser": "node"
-	// "forwardPorts": [3000, 3306],
+    "name": "LAN Tools Dev",
+    "dockerComposeFile": "docker-compose.yml",
+    "service": "app",
+    "workspaceFolder": "/usr/src/app",
+    "settings": {},
+    "extensions": [
+        "dbaeumer.vscode-eslint",
+    ],
+    "remoteUser": "node",
+    "postCreateCommand": "npm install",
+    "postStartCommand": "npm run build-dev",
 }
