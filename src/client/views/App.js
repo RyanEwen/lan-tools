@@ -142,7 +142,7 @@ class App extends React.Component {
                             </IconButton>
                         </Tooltip>
                     }
-                    <Typography component={RouterLink} to={paths.root} variant="h6" noWrap className={classes.title}>LAN Tools</Typography>
+                    <Typography component={RouterLink} to={paths.root} variant="h6" noWrap className={classes.title}>TAN LooLs</Typography>
                     {user &&
                         <Tooltip title="Account Menu">
                             <IconButton

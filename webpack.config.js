@@ -60,7 +60,7 @@ const clientConfig = {
         }),
         new HtmlWebpackPlugin({
             hash: true,
-            title: 'LAN Tools',
+            title: 'TAN Lools',
         }),
         new HtmlWebpackPartialsPlugin([
             {
