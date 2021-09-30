@@ -14,7 +14,7 @@ export default session({
         secure: 'auto',
         sameSite: false,
     },
-    name: 'lan-tools-session',
+    name: 'tan-lools-session',
     saveUninitialized: true,
     secret: 'rewen',
     store: sessionStore,

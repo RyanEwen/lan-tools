@@ -1,5 +1,5 @@
 {
-    "name": "lan-tools",
+    "name": "tan-lools",
     "version": "1.0.0",
     "main": "dist/server/Server.bundle.js",
     "scripts": {

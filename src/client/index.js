@@ -6,7 +6,7 @@ import { BrowserRouter as Router, Route, Switch, Redirect } from "react-router-d
 import AppContextProvider from './context/AppContextProvider'
 import App from './views/App'
 
-const baseURL = process.env.BASEURL || 'lan-tools'
+const baseURL = process.env.BASEURL || 'tan-lools'
 
 ReactDOM.render(
     <SnackbarProvider>
