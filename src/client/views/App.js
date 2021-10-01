@@ -2,7 +2,6 @@ import AppBar from '@material-ui/core/AppBar'
 import Backdrop from '@material-ui/core/Backdrop'
 import Box from '@material-ui/core/Box'
 import CircularProgress from '@material-ui/core/CircularProgress'
-import blue from '@material-ui/core/colors/blue'
 import CssBaseline from '@material-ui/core/CssBaseline'
 import IconButton from '@material-ui/core/IconButton'
 import List from '@material-ui/core/List'
@@ -29,9 +28,6 @@ import Guests from './Guests'
 // import Welcome from './Welcome'
 
 const styles = (theme) => ({
-    appBar: {
-        backgroundColor: blue[700],
-    },
     toolbar: theme.mixins.toolbar,
     title: {
         flexGrow: 1,
@@ -128,7 +124,7 @@ class App extends React.Component {
                     </List>
                 </SwipeableDrawer>
             }
-            <AppBar classes={{ root: classes.appBar }} position='fixed'>
+            <AppBar position='fixed'>
                 <Toolbar>
                     {user &&
                         <Tooltip title="Menu">

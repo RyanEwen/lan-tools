@@ -48,9 +48,7 @@ class Guests extends React.Component {
 
         return (
             <Container maxWidth="sm">
-                <Heading icon={<MenuBookIcon />}>
-                    Guests
-                </Heading>
+                <Heading>Guests</Heading>
                 <Grid container justifyContent="space-between" alignItems="flex-end">
                     <Grid className={classes.breadcrumbs} item xs={12} sm={7} md={9} lg={9}>
                         <Route path={`${url}/:guestId?`}>
