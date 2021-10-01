@@ -243,7 +243,7 @@ import getDiscordClient, { updatePresence } from './discord'
 
             async function countUsersAndUpdatePresence() {
                 const sockets = await websockets.fetchSockets()
-                const userIds = _.uniq(sockets.map(socket => socket.handshake.session.passport.user).filter(userId => userId))
+                const userIds = _.uniq(sockets.map(socket => socket.handshake.session.passport?.user).filter(userId => userId))
 
                 updatePresence(userIds.length)
             }
