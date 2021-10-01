@@ -25,7 +25,7 @@ export default function PasswordField(props) {
                             {showPassword ? <VisibilityIcon /> : <VisibilityOffIcon />}
                         </IconButton>
                     </InputAdornment>
-                )
+                ),
             }}
         />
     )
