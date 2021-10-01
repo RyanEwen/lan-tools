@@ -16,7 +16,7 @@ export async function updatePresence(userCount) {
 
     // set or clear presence
     if (userCount) {
-        discordClient.user.setActivity(`${userCount} users in app!`, { type: 'WATCHING' })
+        discordClient.user.setActivity(`${userCount} users in the app!`, { type: 'WATCHING' })
     } else {
         discordClient.user.setActivity(null)
     }
