@@ -60,7 +60,7 @@ const clientConfig = {
         }),
         new HtmlWebpackPlugin({
             hash: true,
-            title: 'TAN Lools',
+            title: 'TAN LOOLS',
         }),
         new HtmlWebpackPartialsPlugin([
             {

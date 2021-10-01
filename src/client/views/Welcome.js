@@ -23,7 +23,7 @@ export default function Welcome(props) {
                 Welcome, {user.name}!
             </Heading>
             <Box spacing={2} className={classes.box}>
-                <Typography paragraph>Welcome to TAN LooLs!</Typography>
+                <Typography paragraph>Welcome to TAN LOOLS!</Typography>
             </Box>
         </Container>
     )

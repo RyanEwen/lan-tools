@@ -1,5 +1,5 @@
 {
-    "name": "LAN Tools Dev",
+    "name": "TAN LOOLS Dev",
     "dockerComposeFile": "docker-compose.yml",
     "service": "app",
     "workspaceFolder": "/usr/src/app",
