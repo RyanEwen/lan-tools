@@ -10,11 +10,18 @@ services:
 
   app:
     image: technicallyreal/tan-lools
-    build: ./
-    env_file:
-      - .env
     environment:
       TZ: America/Toronto
+      DATABASE_HOST: db
+      DATABASE_PORT: 3306
+      DATABASE_USER: root
+      DATABASE_PASS: example
+      DATABASE_NAME: app
+      DISCORD_CLIENT_ID:
+      DISCORD_CLIENT_SECRET:
+      DISCORD_TOKEN:
+      DISCORD_CALLBACK_URL: http://localhost:3000/callback
+      DISCORD_SERVER_ID:
     depends_on:
       - db
     ports:
