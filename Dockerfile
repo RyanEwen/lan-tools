@@ -4,8 +4,12 @@ WORKDIR /usr/src/app
 
 COPY ./ ./
 
-RUN npm install -q
-
+# create production build
+RUN npm ci -q
 RUN npm run build-prod
+
+# remove build files
+RUN rm -rf src/
+RUN npm ci -q --omit=dev
 
 CMD ["node", "."]
