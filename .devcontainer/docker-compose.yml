@@ -23,8 +23,6 @@ services:
     volumes:
       - ..:/usr/src/app:cached
       - ~/.ssh:/home/node/.ssh
-    env_file:
-      - .env
     environment:
       TZ: America/Toronto
       NODE_ENV: development
